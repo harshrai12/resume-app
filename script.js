@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     const resumeForm = document.getElementById("resumeForm");
     const resumeList = document.getElementById("resumeList");
@@ -20,7 +19,19 @@ document.addEventListener("DOMContentLoaded", () => {
             project,
             dob,
         };
-        saveResume(resume);
+
+        const editIndex = parseInt(resumeForm.dataset.editIndex);
+        if (editIndex >= 0) {
+            // Editing an existing resume
+            const resumes = JSON.parse(localStorage.getItem("resumes")) || [];
+            resumes[editIndex] = resume; // Use "resume" instead of "editedResume"
+            localStorage.setItem("resumes", JSON.stringify(resumes));
+            resumeForm.dataset.editIndex = -1; // Reset the edit index
+        } else {
+            // Creating a new resume
+            saveResume(resume);
+        }
+
         resumeForm.reset();
         renderResumeList();
     });
@@ -44,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 Name: ${resume.name}
                 <button class="view" data-index="${i}">View Resume</button>
                 <button class="delete" data-index="${i}">Delete</button>
-                <button class="Edit" data-index="${i}">Edit</button>
+                <button class="edit" data-index="${i}">Edit</button>
             `;
 
             resumeList.appendChild(listItem);
@@ -54,13 +65,37 @@ document.addEventListener("DOMContentLoaded", () => {
     resumeList.addEventListener("click", (e) => {
         if (e.target.classList.contains("view")) {
             const index = e.target.getAttribute("data-index");
-            
             viewResume(index);
         } else if (e.target.classList.contains("delete")) {
             const index = e.target.getAttribute("data-index");
             console.log(index);
             deleteResume(index);
+        } 
+        else if (e.target.classList.contains("edit")) {
+            const index = e.target.getAttribute("data-index");
+            const selectedResume = JSON.parse(localStorage.getItem("resumes"))[index];
+        
+            // Populate the form fields with the selected resume's data
+            document.getElementById("name").value = selectedResume.name;
+            document.getElementById("age").value = selectedResume.age;
+        
+            // Populate the radio button for experience
+            const experienceRadios = document.querySelectorAll('input[name="experience"]');
+            for (const radio of experienceRadios) {
+                if (radio.value === selectedResume.experience) {
+                    radio.checked = true;
+                    break; // Once found, exit the loop
+                }
+            }
+        
+            document.getElementById("gender").value = selectedResume.gender;
+            document.getElementById("project").value = selectedResume.project;
+            document.getElementById("dob").value = selectedResume.dob;
+        
+            // Store the index of the resume being edited for later use
+            resumeForm.dataset.editIndex = index;
         }
+        
     });
 
    function viewResume(index) {
@@ -101,8 +136,6 @@ if (resumeData) {
 
     const resume = JSON.parse(resumeData);
     console.log(resume);
-
-
     const resumeDetails = document.getElementById("resumeDetails");
     resumeDetails.innerHTML = `
     <div class="resume-container">
@@ -134,7 +167,7 @@ if (resumeData) {
 </div>
         
     `;
-    
+
 } else {
     console.error("Resume data not found in query parameter.");
 }
