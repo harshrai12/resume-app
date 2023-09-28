@@ -27,11 +27,14 @@ form {
     width: 80%; /* Adjust the width as needed */
     max-width: 500px; /* Limit the maximum width */
     margin: 20px auto; /* Center horizontally with top and bottom margin */
+
 }
 
 label {
     display: block;
     margin-bottom: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
 }
 
 input[type="text"],
@@ -39,7 +42,6 @@ input[type="number"],
 textarea,
 select,
 input[type="date"] {
-    width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -47,8 +49,21 @@ input[type="date"] {
 }
 
 input[type="radio"] {
-    margin-right: 5px;
+    display: flex;
+    
 }
+.experience-radio {
+    display: flex; 
+    align-items: center; 
+   
+}
+
+.experience-radio label {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
 
 input[type="submit"] {
     background-color: #007acc;
@@ -87,6 +102,32 @@ li {
     cursor: pointer;
     margin-right: 5px;
 }
+
+.resume-container {
+    display: flex; /* Use flexbox for horizontal layout */
+    justify-content: space-between; /* Space items evenly */
+    align-items: center; /* Center items vertically */
+    border: 1px solid #ccc; /* Optional: Add a border for better separation */
+    padding: 10px; /* Optional: Add padding for spacing */
+}
+
+.resume-info,
+.resume-actions {
+    display: flex;
+    justify-content: space-between; /* Make both sections take up equal horizontal space */
+}
+
+.resume-info p{
+    padding-right: 50px;
+}
+
+.resume-actions button {
+    display: flex;
+    margin-right: 10px; /* Add some spacing between buttons */
+}
+
+
+
 
 .view:hover,
 .delete:hover {
